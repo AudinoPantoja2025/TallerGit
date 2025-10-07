@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Listado de Usuarios</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .users-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .users-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e1e5e9;
+    }
+
+    .users-header h1 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .users-header p {
+      color: #666;
+      margin: 0;
+    }
+
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .users-table th,
+    .users-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e1e5e9;
+    }
+
+    .users-table th {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    .users-table tbody tr:hover {
+      background-color: #f8f9fa;
+      transform: scale(1.01);
+      transition: all 0.2s ease;
+    }
+
+    .users-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-active {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-inactive {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-small {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-edit {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .btn-edit:hover {
+      background-color: #e0a800;
+      transform: translateY(-1px);
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .add-user-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .add-user-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .search-container {
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .users-table {
+        font-size: 0.9rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .search-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" role="main">
+    <div class="users-container">
+      <div class="users-header">
+        <h1>Listado de Usuarios</h1>
+        <p>Gestión y administración de usuarios del sistema</p>
+      </div>
+
+      <div class="search-container">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Buscar usuarios por nombre, email o estado..."
+          onkeyup="filterUsers(this.value)"
+        />
+        <button class="add-user-btn" onclick="addNewUser()">
+          + Agregar Usuario
+        </button>
+      </div>
+
+      <table class="users-table" id="usersTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha de Registro</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <tr>
+            <td>001</td>
+            <td>Juan Pérez</td>
+            <td>juan.perez@email.com</td>
+            <td>15/03/2024</td>
+            <td><span class="status-badge status-active">Activo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('001')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('001')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>María González</td>
+            <td>maria.gonzalez@email.com</td>
+            <td>22/03/2024</td>
+            <td><span class="status-badge status-active">Activo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('002')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('002')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>Carlos Rodríguez</td>
+            <td>carlos.rodriguez@email.com</td>
+            <td>10/04/2024</td>
+            <td><span class="status-badge status-inactive">Inactivo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('003')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('003')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>004</td>
+            <td>Ana Martínez</td>
+            <td>ana.martinez@email.com</td>
+            <td>05/05/2024</td>
+            <td><span class="status-badge status-active">Activo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('004')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('004')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>005</td>
+            <td>Luis Hernández</td>
+            <td>luis.hernandez@email.com</td>
+            <td>18/06/2024</td>
+            <td><span class="status-badge status-active">Activo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('005')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('005')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function filterUsers(searchTerm) {
+      const table = document.getElementById('usersTableBody');
+      const rows = table.getElementsByTagName('tr');
+      
+      searchTerm = searchTerm.toLowerCase();
+      
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const cells = row.getElementsByTagName('td');
+        let found = false;
+        
+        // Buscar en nombre, email y estado
+        for (let j = 1; j <= 4; j++) {
+          if (cells[j] && cells[j].textContent.toLowerCase().includes(searchTerm)) {
+            found = true;
+            break;
+          }
+        }
+        
+        row.style.display = found ? '' : 'none';
+      }
+    }
+
+    function addNewUser() {
+      const name = prompt('Ingrese el nombre del nuevo usuario:');
+      const email = prompt('Ingrese el email del nuevo usuario:');
+      
+      if (name && email) {
+        const tableBody = document.getElementById('usersTableBody');
+        const newId = String(tableBody.children.length + 1).padStart(3, '0');
+        const currentDate = new Date().toLocaleDateString('es-ES');
+        
+        const newRow = `
+          <tr>
+            <td>${newId}</td>
+            <td>${name}</td>
+            <td>${email}</td>
+            <td>${currentDate}</td>
+            <td><span class="status-badge status-active">Activo</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-edit" onclick="editUser('${newId}')">Editar</button>
+                <button class="btn-small btn-delete" onclick="deleteUser('${newId}')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        `;
+        
+        tableBody.insertAdjacentHTML('beforeend', newRow);
+        alert(`Usuario ${name} agregado exitosamente!`);
+      }
+    }
+
+    function editUser(userId) {
+      alert(`Editando usuario con ID: ${userId}`);
+      // Aquí podrías implementar un modal o formulario de edición
+    }
+
+    function deleteUser(userId) {
+      if (confirm(`¿Estás seguro de que deseas eliminar el usuario con ID: ${userId}?`)) {
+        const tableBody = document.getElementById('usersTableBody');
+        const rows = tableBody.getElementsByTagName('tr');
+        
+        for (let i = 0; i < rows.length; i++) {
+          const firstCell = rows[i].getElementsByTagName('td')[0];
+          if (firstCell && firstCell.textContent === userId) {
+            rows[i].remove();
+            alert(`Usuario con ID ${userId} eliminado exitosamente!`);
+            break;
+          }
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
