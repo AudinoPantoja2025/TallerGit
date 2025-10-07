@@ -1,0 +1,49 @@
+name: CI/CD Básico - Verificación y Despliegue
+
+on:
+  push:
+    branches: ["main"]   # Se ejecuta cada vez que hay un push en 'main'
+  workflow_dispatch:     # Permite ejecutarlo manualmente
+
+jobs:
+  # JOB 1: Integración Continua (CI)
+  verificar_archivos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Verificar existencia de archivos requeridos
+        run: |
+          echo "Verificando archivos requeridos..."
+
+          if [ -f home.html ]; then
+            echo "home.html encontrado"
+          else
+            echo "home.html no encontrado"
+            exit 1
+          fi
+
+          if [ -f styles.css ] || [ -f css.html ]; then
+            echo "Archivo CSS encontrado"
+          else
+            echo "No se encontró styles.css ni css.html"
+            exit 1
+          fi
+
+          echo "CI completado exitosamente"
+
+  # 🔹 JOB 2: Despliegue Continuo (CD)
+  simular_despliegue:
+    needs: verificar_archivos   # Solo se ejecuta si el CI pasa correctamente
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'   # Solo en la rama main
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Simulación de despliegue
+        run: |
+          echo "Compilando y preparando artefactos..."
+          echo "Artefactos listos para el despliegue en el entorno de Staging ✅"
