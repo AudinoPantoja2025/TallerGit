@@ -1,0 +1,125 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
+  color: #222;
+  line-height: 1.4;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Contenedor principal */
+.card {
+  width: 100%;
+  max-width: 720px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(30,40,60,0.08);
+  overflow: hidden;
+}
+
+/* Encabezado */
+header {
+  padding: 20px;
+  background: linear-gradient(90deg, #5b8def, #7bdff6);
+  color: white;
+}
+header h1 {
+  font-size: 1.25rem;
+}
+header p {
+  font-size: 0.9rem;
+  opacity: 0.95;
+  margin-top: 6px;
+}
+
+/* Contenido */
+main {
+  padding: 20px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 16px;
+  align-items: start;
+}
+
+.info {
+  background: #fbfdff;
+  border: 1px solid #eef6ff;
+  padding: 16px;
+  border-radius: 8px;
+}
+.info h2 {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+.info p {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Panel lateral */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: #2f6fff;
+  color: white;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(47,111,255,0.18);
+}
+
+.tip {
+  background: #fff;
+  border: 1px solid #eef6ff;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+.tip p {
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* Pie */
+footer {
+  padding: 12px 20px;
+  font-size: 0.85rem;
+  color: #666;
+  background: #fafcff;
+  border-top: 1px solid #f0f4ff;
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .aside {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
